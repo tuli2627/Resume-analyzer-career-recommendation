@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Resume Analyzer & Career Recommendation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .wrapper {
+            width: 90%;
+            max-width: 1000px;
+            background: #ffffff;
+            border-radius: 14px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .card {
+            background: #f9fafc;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #2c5364;
+        }
+
+        textarea, input[type="file"] {
+            width: 100%;
+            margin-top: 8px;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        textarea {
+            height: 90px;
+            resize: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #2c5364;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #1f3c4c;
+        }
+
+        .result {
+            margin-top: 15px;
+        }
+
+        .result strong {
+            display: block;
+            margin-bottom: 6px;
+            color: #333;
+        }
+
+        .result ul {
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        .result li {
+            margin-bottom: 5px;
+            color: #444;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <h1>Resume Analyzer & Career Recommendation System</h1>
+
+    <div class="grid">
+
+        <!-- LEFT: SKILL → JOB RECOMMENDATION -->
+        <div class="card">
+            <h2>Career Recommendation</h2>
+
+            <form method="POST">
+                <label><strong>Enter Your Skills</strong></label>
+                <textarea
+                    name="skills"
+                    placeholder="Example: Python, Machine Learning, SQL, Web Development"
+                    required></textarea>
+
+                <button type="submit">Recommend Jobs</button>
+            </form>
+
+            {% if jobs %}
+            <div class="result">
+                <strong>Recommended Job Roles:</strong>
+                <ul>
+                    {% for job in jobs %}
+                        <li>{{ job }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- RIGHT: RESUME ANALYZER -->
+        <div class="card">
+            <h2>Resume Analyzer</h2>
+
+            <form method="POST" action="/resume-analyze" enctype="multipart/form-data">
+                <label><strong>Upload Resume (PDF)</strong></label>
+                <input type="file" name="resume_pdf" accept=".pdf" required>
+
+                <label><strong>Upload Job Description (PDF)</strong></label>
+                <input type="file" name="job_pdf" accept=".pdf" required>
+
+                <button type="submit">Analyze Resume</button>
+            </form>
+
+            {% if matched_skills %}
+            <div class="result">
+                <strong>Matched Skills:</strong>
+                <ul>
+                    {% for skill in matched_skills %}
+                        <li>{{ skill }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            {% if missing_skills %}
+            <div class="result">
+                <strong>Missing Skills:</strong>
+                <ul>
+                    {% for skill in missing_skills %}
+                        <li>{{ skill }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
